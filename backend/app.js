@@ -6,6 +6,7 @@ const morgan = require("morgan");
 const url = require('url-parse');
 const cookieParser = require('cookie-parser');
 const cors = require("cors");
+const path=require('path');
 
 require('dotenv').config()   //import .env 
 
@@ -35,10 +36,12 @@ mongoose
 
 
   readdirSync("./routes").map((r) => app.use("/api", require("./routes/" + r)));
+  app.use(express.static(path.join(__dirname, 'build')));
 
-app.get('/',(req,res)=>{ 
-    res.send("HELLO"); 
-});
+
+  app.get('/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  });
 
 app.listen(port,()=>console.log(`server is running at port ${port}`));
 
